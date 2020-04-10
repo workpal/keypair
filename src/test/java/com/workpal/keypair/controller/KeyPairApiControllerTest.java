@@ -3,6 +3,7 @@ package com.workpal.keypair.controller;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.Test;
@@ -44,6 +45,18 @@ public class KeyPairApiControllerTest {
 		mockMvc.perform(post(RESOURCE_URL + "/generate").headers(httpHeaders)
 				.contentType(MediaType.APPLICATION_JSON_VALUE).content(generateKeyRequest).characterEncoding("utf-8"))
 				.andDo(print()).andExpect(status().isOk());
+	}
+	
+	@Test
+	public void generateKeyPair_whenEmptyRequest_thenReturnStatus400() throws Exception {
+		var httpHeaders = new HttpHeaders();
+		var generateKeyPairReq = new GenerateKeyPairRequest();
+		generateKeyPairReq.setName("");
+		generateKeyPairReq.setDescription("");
+		var generateKeyRequest = convertToJsonString(generateKeyPairReq);
+		mockMvc.perform(post(RESOURCE_URL + "/generate").headers(httpHeaders)
+				.contentType(MediaType.APPLICATION_JSON_VALUE).content(generateKeyRequest).characterEncoding("utf-8"))
+				.andDo(print()).andExpect(status().isBadRequest()).andExpect(jsonPath("$.error_messages").isArray());
 	}
 	
 	private String convertToJsonString(Object request) throws JsonProcessingException {

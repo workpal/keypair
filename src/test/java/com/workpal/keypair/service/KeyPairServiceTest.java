@@ -1,5 +1,6 @@
 package com.workpal.keypair.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -63,6 +64,11 @@ public class KeyPairServiceTest {
 	@DisplayName("testGetAllKeyPair")
 	@Test
 	public void testGetAllKeyPair() {
-		keyPairService.getAllKeyPairs();
+		var keyPair = new KeyPair("keypair name", "keypair description", "ssh-rsa asdas", KeyCreationType.IMPORTED);
+		List<KeyPair> keyPairList = List.of(keyPair);
+		when(keyPairRepo.findAll()).thenReturn(keyPairList);
+		var keyPairs = keyPairService.getAllKeyPairs();
+		assertEquals(keyPair, keyPairs.get(0));
+		assertTrue(keyPairs.size() ==0);
 	}	
 }

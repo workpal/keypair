@@ -107,8 +107,8 @@ public class KeyPairServiceImpl implements KeyPairService {
 
 	@Override
 	public List<KeyPair> getAllKeyPairs() {
-		// TODO Auto-generated method stub
-		return null;
+		LOGGER.info("Get all keypairs");
+		return keyPairRepository.findAll();
 	}
 
 }

@@ -69,6 +69,6 @@ public class KeyPairServiceTest {
 		when(keyPairRepo.findAll()).thenReturn(keyPairList);
 		var keyPairs = keyPairService.getAllKeyPairs();
 		assertEquals(keyPair, keyPairs.get(0));
-		assertTrue(keyPairs.size() ==0);
+		assertTrue(keyPairs.size()>0);
 	}	
 }

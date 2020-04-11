@@ -39,5 +39,11 @@ public class KeyPairApiController implements KeyPairApi {
 		keyPairService.createKeyPair(keyPairCreateRequest);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+	
+	@Override
+	public ResponseEntity<?> getAllKeyPair() {
+		var keyPairs = keyPairService.getAllKeyPairs();
+		return new ResponseEntity<>(keyPairs, HttpStatus.OK);
+	}
 
 }

@@ -19,6 +19,7 @@ import com.workpal.keypair.enums.KeyCreationType;
 import com.workpal.keypair.exception.InternalServerErrorException;
 import com.workpal.keypair.repository.KeyPairRepository;
 import com.workpal.keypair.request.GenerateKeyPairRequest;
+import com.workpal.keypair.request.KeyPairCreateRequest;
 import com.workpal.keypair.service.KeyPairService;
 
 @Service
@@ -68,6 +69,12 @@ public class KeyPairServiceImpl implements KeyPairService {
 		}
 
 		return keyPairMap;
+	}
+
+	@Override
+	public void createKeyPair(KeyPairCreateRequest keyPairCreateRequest) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

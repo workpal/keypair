@@ -48,7 +48,7 @@ public class KeyPairApiControllerTest {
 				.andDo(print()).andExpect(status().isOk());
 	}
 	
-	//@Test
+	@Test
 	public void generateKeyPair_whenEmptyRequest_thenReturnStatus400() throws Exception {
 		var httpHeaders = new HttpHeaders();
 		var generateKeyPairReq = new GenerateKeyPairRequest();

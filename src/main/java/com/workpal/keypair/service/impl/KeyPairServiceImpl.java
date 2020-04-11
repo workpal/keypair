@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bouncycastle.crypto.util.OpenSSHPublicKeyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import com.jcraft.jsch.JSch;
 import com.workpal.keypair.domain.KeyPair;
 import com.workpal.keypair.enums.KeyCreationType;
 import com.workpal.keypair.exception.InternalServerErrorException;
+import com.workpal.keypair.exception.KeyPairValidationException;
 import com.workpal.keypair.repository.KeyPairRepository;
 import com.workpal.keypair.request.GenerateKeyPairRequest;
 import com.workpal.keypair.request.KeyPairCreateRequest;
@@ -73,8 +75,33 @@ public class KeyPairServiceImpl implements KeyPairService {
 
 	@Override
 	public void createKeyPair(KeyPairCreateRequest keyPairCreateRequest) {
-		// TODO Auto-generated method stub
+		ValidateKeyPair(keyPairCreateRequest.getKey().strip());
+		var keyPair = new KeyPair(keyPairCreateRequest.getName(), keyPairCreateRequest.getDescription(),
+				keyPairCreateRequest.getKey(), KeyCreationType.IMPORTED);
+		LOGGER.info("Create keypair {} ", keyPair);
+		keyPairRepository.save(keyPair);
 		
+	}
+	
+	private void ValidateKeyPair(String key) {
+		LOGGER.info("Key validation starts");
+		String[] replacedString = null;
+		if (key.startsWith("ssh-rsa ")) {
+			replacedString = key.split("ssh-rsa ", 0);
+		}
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < replacedString.length; i++) {
+			sb.append(replacedString[i]);
+		}
+		String keyString = sb.toString();
+		try {
+			OpenSSHPublicKeyUtil.parsePublicKey(org.bouncycastle.util.encoders.Base64.decode(keyString));
+		} catch (Exception e) {
+			LOGGER.info("Validation failure - {} ", e.getMessage());
+			var errMsg = String.format("Key pair validation is failure");
+			LOGGER.info(errMsg);
+			throw new KeyPairValidationException(errMsg);
+		}
 	}
 
 }

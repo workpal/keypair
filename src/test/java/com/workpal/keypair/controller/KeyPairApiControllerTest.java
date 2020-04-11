@@ -77,7 +77,7 @@ public class KeyPairApiControllerTest {
 	public void createKeyPair_thenReturnStatus200() throws Exception {
 		var httpHeaders = new HttpHeaders();
 		var keyPairRequest = new KeyPairCreateRequest();
-		keyPairRequest.setName("testkeypair@123");
+		keyPairRequest.setName("testkeypair123");
 		keyPairRequest.setDescription("testkeypair");
 		keyPairRequest.setKey(
 				"ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAH4A2KFIgLhQNmR82VQn5zGzHURA03JVzNL/U3P19hpIv3CQr1PETAj0e30/mid2ESwoYgSsYyKusD0DEeqG9joYzfdMO14zbd6nJNwmd38C+ltEI4mG2K+/7MZdJO6WXpfs6citVSy2tB6hucXemUqn441ghO88SxjrxrOCtU8=");

@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.bouncycastle.crypto.util.OpenSSHPublicKeyUtil;
@@ -102,6 +103,12 @@ public class KeyPairServiceImpl implements KeyPairService {
 			LOGGER.info(errMsg);
 			throw new KeyPairValidationException(errMsg);
 		}
+	}
+
+	@Override
+	public List<KeyPair> getAllKeyPairs() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

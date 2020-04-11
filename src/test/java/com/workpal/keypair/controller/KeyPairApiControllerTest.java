@@ -73,6 +73,21 @@ public class KeyPairApiControllerTest {
 				.andDo(print()).andExpect(status().isBadRequest()).andExpect(jsonPath("$.error_messages").isArray());
 	}
 	
+	@Test
+	public void createKeyPair_thenReturnStatus200() throws Exception {
+		var httpHeaders = new HttpHeaders();
+		var keyPairRequest = new KeyPairCreateRequest();
+		keyPairRequest.setName("testkeypair");
+		keyPairRequest.setDescription("testkeypair");
+		keyPairRequest.setKey(
+				"ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAH4A2KFIgLhQNmR82VQn5zGzHURA03JVzNL/U3P19hpIv3CQr1PETAj0e30/mid2ESwoYgSsYyKusD0DEeqG9joYzfdMO14zbd6nJNwmd38C+ltEI4mG2K+/7MZdJO6WXpfs6citVSy2tB6hucXemUqn441ghO88SxjrxrOCtU8=");
+		var keyPairReq = convertToJsonString(keyPairRequest);
+
+		mockMvc.perform(post(RESOURCE_URL + "/create").headers(httpHeaders)
+				.contentType(MediaType.APPLICATION_JSON_VALUE).content(keyPairReq).characterEncoding("utf-8"))
+				.andDo(print()).andExpect(status().isOk());
+	}
+	
 	private String convertToJsonString(Object request) throws JsonProcessingException {
 		ObjectMapper objMapper = new ObjectMapper();
 		return objMapper.writeValueAsString(request);

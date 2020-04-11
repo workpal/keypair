@@ -1,10 +1,13 @@
 package com.workpal.keypair.controller;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,6 +22,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.workpal.keypair.domain.KeyPair;
+import com.workpal.keypair.enums.KeyCreationType;
 import com.workpal.keypair.request.GenerateKeyPairRequest;
 import com.workpal.keypair.request.KeyPairCreateRequest;
 import com.workpal.keypair.service.KeyPairService;
@@ -34,7 +39,7 @@ public class KeyPairApiControllerTest {
 
 	@MockBean
 	private KeyPairService keyPairService;
-	
+
 	@Test
 	public void generateKeyPair__thenReturnStatus200() throws Exception {
 		var httpHeaders = new HttpHeaders();
@@ -47,7 +52,7 @@ public class KeyPairApiControllerTest {
 				.contentType(MediaType.APPLICATION_JSON_VALUE).content(generateKeyRequest).characterEncoding("utf-8"))
 				.andDo(print()).andExpect(status().isOk());
 	}
-	
+
 	@Test
 	public void generateKeyPair_whenEmptyRequest_thenReturnStatus400() throws Exception {
 		var httpHeaders = new HttpHeaders();
@@ -59,7 +64,7 @@ public class KeyPairApiControllerTest {
 				.contentType(MediaType.APPLICATION_JSON_VALUE).content(generateKeyRequest).characterEncoding("utf-8"))
 				.andDo(print()).andExpect(status().isBadRequest()).andExpect(jsonPath("$.error_messages").isArray());
 	}
-	
+
 	@Test
 	public void createKeyPair_whenEmptyRequest_thenReturnStatus400() throws Exception {
 		var httpHeaders = new HttpHeaders();
@@ -72,7 +77,7 @@ public class KeyPairApiControllerTest {
 				.contentType(MediaType.APPLICATION_JSON_VALUE).content(keyPairReq).characterEncoding("utf-8"))
 				.andDo(print()).andExpect(status().isBadRequest()).andExpect(jsonPath("$.error_messages").isArray());
 	}
-	
+
 	@Test
 	public void createKeyPair_thenReturnStatus200() throws Exception {
 		var httpHeaders = new HttpHeaders();
@@ -87,7 +92,17 @@ public class KeyPairApiControllerTest {
 				.contentType(MediaType.APPLICATION_JSON_VALUE).content(keyPairReq).characterEncoding("utf-8"))
 				.andDo(print()).andExpect(status().isOk());
 	}
-	
+
+	@Test
+	public void getAllKeyPairs__thenReturnStatus200() throws Exception {
+		var httpHeaders = new HttpHeaders();
+		var keyPair = new KeyPair("keypair name", "keypair description", "ssh-rsa asdas", KeyCreationType.IMPORTED);
+		List<com.workpal.keypair.domain.KeyPair> keyPairList = List.of(keyPair);
+		when(keyPairService.getAllKeyPairs()).thenReturn(keyPairList);
+		mockMvc.perform(get(RESOURCE_URL).headers(httpHeaders).contentType(MediaType.APPLICATION_JSON_VALUE)
+				.characterEncoding("utf-8")).andDo(print()).andExpect(status().isOk());
+	}
+
 	private String convertToJsonString(Object request) throws JsonProcessingException {
 		ObjectMapper objMapper = new ObjectMapper();
 		return objMapper.writeValueAsString(request);

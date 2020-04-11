@@ -14,12 +14,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.workpal.keypair.request.GenerateKeyPairRequest;
+import com.workpal.keypair.request.KeyPairCreateRequest;
 import com.workpal.keypair.service.KeyPairService;
 
 @RestController()
 @CrossOrigin
 public class KeyPairApiController implements KeyPairApi {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(KeyPairApiController.class);
 
 	@Autowired
@@ -28,8 +29,15 @@ public class KeyPairApiController implements KeyPairApi {
 	@Override
 	public ResponseEntity<?> generateKeyPair(@Valid @RequestBody GenerateKeyPairRequest generateKeyPairRequest) {
 		LOGGER.info("Generate key pair {} ", generateKeyPairRequest);
-		var keyPair = keyPairService.generateKeyPair(generateKeyPairRequest);		
+		var keyPair = keyPairService.generateKeyPair(generateKeyPairRequest);
 		return new ResponseEntity<>(Map.of("privateKey", keyPair), HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<?> createKeyPair(@Valid @RequestBody KeyPairCreateRequest keyPairCreateRequest) {
+		LOGGER.info("Create key pair {} ", keyPairCreateRequest);
+		keyPairService.createKeyPair(keyPairCreateRequest);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 }

@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.workpal.keypair.request.GenerateKeyPairRequest;
+import com.workpal.keypair.request.KeyPairCreateRequest;
 import com.workpal.keypair.service.KeyPairService;
 
 @ExtendWith(SpringExtension.class)
@@ -56,6 +57,19 @@ public class KeyPairApiControllerTest {
 		var generateKeyRequest = convertToJsonString(generateKeyPairReq);
 		mockMvc.perform(post(RESOURCE_URL + "/generate").headers(httpHeaders)
 				.contentType(MediaType.APPLICATION_JSON_VALUE).content(generateKeyRequest).characterEncoding("utf-8"))
+				.andDo(print()).andExpect(status().isBadRequest()).andExpect(jsonPath("$.error_messages").isArray());
+	}
+	
+	@Test
+	public void createKeyPair_whenEmptyRequest_thenReturnStatus400() throws Exception {
+		var httpHeaders = new HttpHeaders();
+		var keyPairRequest = new KeyPairCreateRequest();
+		keyPairRequest.setName("");
+		keyPairRequest.setDescription("");
+		keyPairRequest.setKey("");
+		var keyPairReq = convertToJsonString(keyPairRequest);
+		mockMvc.perform(post(RESOURCE_URL + "/create").headers(httpHeaders)
+				.contentType(MediaType.APPLICATION_JSON_VALUE).content(keyPairReq).characterEncoding("utf-8"))
 				.andDo(print()).andExpect(status().isBadRequest()).andExpect(jsonPath("$.error_messages").isArray());
 	}
 	

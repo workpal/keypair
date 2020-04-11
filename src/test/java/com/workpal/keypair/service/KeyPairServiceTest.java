@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,6 +15,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.workpal.keypair.domain.KeyPair;
+import com.workpal.keypair.enums.KeyCreationType;
 import com.workpal.keypair.repository.KeyPairRepository;
 import com.workpal.keypair.request.GenerateKeyPairRequest;
 import com.workpal.keypair.request.KeyPairCreateRequest;
@@ -57,4 +60,9 @@ public class KeyPairServiceTest {
 		keyPairService.createKeyPair(keyPairCreateRequest);
 
 	}
+	@DisplayName("testGetAllKeyPair")
+	@Test
+	public void testGetAllKeyPair() {
+		keyPairService.getAllKeyPairs();
+	}	
 }

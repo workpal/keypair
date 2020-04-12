@@ -11,4 +11,5 @@ public interface KeyPairService  {
 	public void createKeyPair(KeyPairCreateRequest keyPairCreateRequest);
 	public List<KeyPair> getAllKeyPairs();
 	public KeyPair getKeyPairById(String keyPairId);
+	public void removeKeyPairById(String keyPairId);
 }

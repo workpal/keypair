@@ -123,4 +123,10 @@ public class KeyPairServiceImpl implements KeyPairService {
 		return keyPair;
 	}
 
+	@Override
+	public void removeKeyPairById(String keyPairId) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

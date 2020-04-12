@@ -95,4 +95,11 @@ public class KeyPairServiceTest {
 		var keyPairObject = keyPairService.getKeyPairById(keyPairId);
 		assertEquals(keyPair, keyPairObject);
 	}
+	
+	@DisplayName("testRemoveKeyPairById")
+	@Test
+	public void testDeleteKeyPairById() {
+		String keyPairId = "5e5517d216b7bc278b05037d";
+		keyPairService.removeKeyPairById(keyPairId);
+	}
 }

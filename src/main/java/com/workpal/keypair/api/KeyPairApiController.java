@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.workpal.keypair.request.GenerateKeyPairRequest;
 import com.workpal.keypair.request.KeyPairCreateRequest;
+import com.workpal.keypair.request.KeyValidationRequest;
 import com.workpal.keypair.service.KeyPairService;
 
 @RestController()
@@ -59,6 +60,12 @@ public class KeyPairApiController implements KeyPairApi {
 		LOGGER.info("Key pair Id {} ", keyPairId);
 		keyPairService.removeKeyPairById(keyPairId);
 		return new ResponseEntity<>(Map.of("message", "Keypair deleted successfully"), HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<?> ValidatePublicKey(KeyValidationRequest keyValidationRequest) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

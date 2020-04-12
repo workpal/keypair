@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.workpal.keypair.request.GenerateKeyPairRequest;
 import com.workpal.keypair.request.KeyPairCreateRequest;
+import com.workpal.keypair.request.KeyValidationRequest;
 
 public interface KeyPairApi {
 
@@ -27,4 +28,7 @@ public interface KeyPairApi {
 
 	@DeleteMapping(value = "/keypair/{keyPairId}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> removeKeyPairById(String keyPairId);
+	
+	@GetMapping(value = "/keypair/validate", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<?> ValidatePublicKey(KeyValidationRequest keyValidationRequest);
 }

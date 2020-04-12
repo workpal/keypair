@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
@@ -101,6 +100,8 @@ public class KeyPairServiceTest {
 	@Test
 	public void testDeleteKeyPairById() {
 		String keyPairId = "5e5517d216b7bc278b05037d";
+		var keyPair = new KeyPair("keypair name", "keypair description", "ssh-rsa asdas", KeyCreationType.IMPORTED);
+		when(keyPairRepo.findById(keyPairId)).thenReturn(Optional.of(keyPair));
 		keyPairService.removeKeyPairById(keyPairId);
 	}
 }

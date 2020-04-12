@@ -24,6 +24,7 @@ import com.workpal.keypair.exception.ResourceNotFoundException;
 import com.workpal.keypair.repository.KeyPairRepository;
 import com.workpal.keypair.request.GenerateKeyPairRequest;
 import com.workpal.keypair.request.KeyPairCreateRequest;
+import com.workpal.keypair.request.KeyValidationRequest;
 import com.workpal.keypair.service.KeyPairService;
 
 @Service
@@ -125,8 +126,16 @@ public class KeyPairServiceImpl implements KeyPairService {
 
 	@Override
 	public void removeKeyPairById(String keyPairId) {
-		// TODO Auto-generated method stub
-		
+		LOGGER.info("Delete keypair by ID {} ", keyPairId);
+		var keyPair = getKeyPairById(keyPairId);
+		if(keyPair != null) {
+			keyPairRepository.deleteById(keyPairId);
+		}		
+	}
+
+	@Override
+	public void validateKey(KeyValidationRequest keyValidationRequest) {
+		ValidateKeyPair(keyValidationRequest.getKey());		
 	}
 
 }

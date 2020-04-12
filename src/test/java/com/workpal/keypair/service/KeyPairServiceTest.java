@@ -1,11 +1,13 @@
 package com.workpal.keypair.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -17,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.workpal.keypair.domain.KeyPair;
 import com.workpal.keypair.enums.KeyCreationType;
+import com.workpal.keypair.exception.ResourceNotFoundException;
 import com.workpal.keypair.repository.KeyPairRepository;
 import com.workpal.keypair.request.GenerateKeyPairRequest;
 import com.workpal.keypair.request.KeyPairCreateRequest;
@@ -71,4 +74,15 @@ public class KeyPairServiceTest {
 		assertEquals(keyPair, keyPairs.get(0));
 		assertTrue(keyPairs.size()>0);
 	}	
+	
+	@DisplayName("testGetKeyPairById_throwException_whenKeyPairDoesNotExists")
+	@Test
+	public void testGetKeyPairById_ThrowException() {
+		String keyPairId = "5e5517d216b7bc278b05037d";
+		when(keyPairRepo.findById(keyPairId)).thenReturn(Optional.empty());		
+		Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+			keyPairService.getKeyPairById(keyPairId);
+		});
+		assertTrue(exception.getMessage().contains("error"));
+	}
 }

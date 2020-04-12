@@ -118,6 +118,13 @@ public class KeyPairApiControllerTest {
 		mockMvc.perform(get(RESOURCE_URL + "/{keyPairId}", "5e5517d216b7bc278b05037d")).andDo(print())
 				.andExpect(status().isOk());
 	}
+	
+	@Test
+	public void removeKeyPairById__thenReturnStatus200() throws Exception {
+		String keyPairId = "5e5517d216b7bc278b05037d";
+		mockMvc.perform(get(RESOURCE_URL + "/{keyPairId}", keyPairId)).andDo(print())
+				.andExpect(status().isOk());
+	}
 
 	private String convertToJsonString(Object request) throws JsonProcessingException {
 		ObjectMapper objMapper = new ObjectMapper();

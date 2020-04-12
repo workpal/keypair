@@ -19,4 +19,6 @@ public interface KeyPairApi {
 	@GetMapping(value = "/keypair", produces = {MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<?> getAllKeyPair();
 
+	@GetMapping(value = "/keypair/{keyPairId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<?> getKeyPairById(String keyPairId);
 }

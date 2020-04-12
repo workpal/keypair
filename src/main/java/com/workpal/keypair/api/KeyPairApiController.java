@@ -54,4 +54,11 @@ public class KeyPairApiController implements KeyPairApi {
 		return new ResponseEntity<>(keyPair, HttpStatus.OK);
 	}
 
+	@Override
+	public ResponseEntity<?> removeKeyPairById(String keyPairId) {
+		LOGGER.info("Key pair Id {} ", keyPairId);
+		keyPairService.removeKeyPairById(keyPairId);
+		return new ResponseEntity<>(Map.of("message", "Keypair deleted successfully"), HttpStatus.OK);
+	}
+
 }

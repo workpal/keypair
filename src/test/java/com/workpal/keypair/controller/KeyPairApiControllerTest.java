@@ -24,6 +24,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.workpal.keypair.domain.KeyPair;
 import com.workpal.keypair.enums.KeyCreationType;
+import com.workpal.keypair.exception.ResourceNotFoundException;
 import com.workpal.keypair.request.GenerateKeyPairRequest;
 import com.workpal.keypair.request.KeyPairCreateRequest;
 import com.workpal.keypair.service.KeyPairService;
@@ -101,6 +102,21 @@ public class KeyPairApiControllerTest {
 		when(keyPairService.getAllKeyPairs()).thenReturn(keyPairList);
 		mockMvc.perform(get(RESOURCE_URL).headers(httpHeaders).contentType(MediaType.APPLICATION_JSON_VALUE)
 				.characterEncoding("utf-8")).andDo(print()).andExpect(status().isOk());
+	}
+
+	@Test
+	public void getKeyPairById_whenKeyPairDoesnotExists_thenReturnStatus400() throws Exception {
+		String keyPairId = "sd";
+		when(keyPairService.getKeyPairById(keyPairId)).thenThrow(ResourceNotFoundException.class);
+		mockMvc.perform(get(RESOURCE_URL + "/{keyPairId}", keyPairId)).andDo(print()).andExpect(status().isNotFound());
+	}
+
+	@Test
+	public void getKeyPairById__thenReturnStatus200() throws Exception {
+		var keyPair = new KeyPair("keypair name", "keypair description", "ssh-rsa asdas", KeyCreationType.IMPORTED);
+		when(keyPairService.getKeyPairById("5e5517d216b7bc278b05037d")).thenReturn(keyPair);
+		mockMvc.perform(get(RESOURCE_URL + "/{keyPairId}", "5e5517d216b7bc278b05037d")).andDo(print())
+				.andExpect(status().isOk());
 	}
 
 	private String convertToJsonString(Object request) throws JsonProcessingException {

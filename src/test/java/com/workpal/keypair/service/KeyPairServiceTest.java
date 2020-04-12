@@ -83,6 +83,16 @@ public class KeyPairServiceTest {
 		Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
 			keyPairService.getKeyPairById(keyPairId);
 		});
-		assertTrue(exception.getMessage().contains("error"));
+		assertTrue(exception.getMessage().contains("Keypair doesn't exists with : 5e5517d216b7bc278b05037d"));
+	}
+	
+	@DisplayName("testGetKeyPairById")
+	@Test
+	public void testGetKeyPairById() {
+		String keyPairId = "5e5517d216b7bc278b05037d";
+		var keyPair = new KeyPair("keypair name", "keypair description", "ssh-rsa asdas", KeyCreationType.IMPORTED);
+		when(keyPairRepo.findById(keyPairId)).thenReturn(Optional.of(keyPair));
+		var keyPairObject = keyPairService.getKeyPairById(keyPairId);
+		assertEquals(keyPair, keyPairObject);
 	}
 }

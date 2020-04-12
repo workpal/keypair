@@ -20,6 +20,7 @@ import com.workpal.keypair.domain.KeyPair;
 import com.workpal.keypair.enums.KeyCreationType;
 import com.workpal.keypair.exception.InternalServerErrorException;
 import com.workpal.keypair.exception.KeyPairValidationException;
+import com.workpal.keypair.exception.ResourceNotFoundException;
 import com.workpal.keypair.repository.KeyPairRepository;
 import com.workpal.keypair.request.GenerateKeyPairRequest;
 import com.workpal.keypair.request.KeyPairCreateRequest;
@@ -109,6 +110,17 @@ public class KeyPairServiceImpl implements KeyPairService {
 	public List<KeyPair> getAllKeyPairs() {
 		LOGGER.info("Get all keypairs");
 		return keyPairRepository.findAll();
+	}
+
+	@Override
+	public KeyPair getKeyPairById(String keyPairId) {
+		LOGGER.info("Get keypair by ID {} ", keyPairId);
+		var keyPair = keyPairRepository.findById(keyPairId).orElseThrow(() -> {
+			var errMsg = String.format("Keypair doesn't exists with : %s", keyPairId);
+			LOGGER.error(errMsg);
+			return new ResourceNotFoundException(errMsg);
+		});	
+		return keyPair;
 	}
 
 }

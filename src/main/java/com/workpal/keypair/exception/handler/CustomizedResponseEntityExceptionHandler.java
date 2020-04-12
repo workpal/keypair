@@ -7,12 +7,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import com.workpal.keypair.dto.Error;
 
+import com.workpal.keypair.dto.Error;
 import com.workpal.keypair.dto.ErrorResponse;
 import com.workpal.keypair.enums.ErrorCode;
 import com.workpal.keypair.exception.InternalServerErrorException;
 import com.workpal.keypair.exception.KeyPairValidationException;
+import com.workpal.keypair.exception.ResourceNotFoundException;
 
 @ControllerAdvice
 public class CustomizedResponseEntityExceptionHandler {
@@ -31,5 +32,19 @@ public class CustomizedResponseEntityExceptionHandler {
 		errors.add(error);
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 				.body(ErrorResponse.builder().errorMessages(errors).build());
+	}
+	@ExceptionHandler(ResourceNotFoundException.class)
+	ResponseEntity<?> handleResourceNotFound(ResourceNotFoundException ex) {
+
+		if (ex.getErrMap() != null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getErrMap());
+		}
+		var errors = new ArrayList<Error>();
+		var errInfoMap = new HashMap<String, Object>();
+		errInfoMap.put("name", ex.getMessage());
+		var error = Error.builder().errorCode(ErrorCode.RESOURCE_NOT_FOUND).errorInfo(errInfoMap).build();
+		errors.add(error);
+
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.builder().errorMessages(errors).build());
 	}
 }
